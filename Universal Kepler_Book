@@ -1,0 +1,11 @@
+
+% Universal Kepler Equation 
+& This is the version from Bates pg 196
+
+function [zero] = UniversalKepler (t, r0, vr0, alpha, X)
+mu = 398600;
+Z = alpha.*X.^2;
+C = (cosh(sqrt(-Z)) - 1)./(-Z);
+S = (sinh(sqrt(-Z))-(sqrt(-Z)))./sqrt((-Z).^3);
+zero = (X.^3).*S + (r0*vr0/sqrt(mu)).*(X.^2).*C + r0.*X.*(1-Z.*S) - sqrt(mu)*t;
+end
