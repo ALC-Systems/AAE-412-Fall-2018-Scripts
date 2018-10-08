@@ -42,10 +42,31 @@ plot (A,B1);
 grid on;
 xlabel('X');
 ylabel('Intersection');
-title('Universal Kepler Eqn Soln');
+title('Solving for Universal Anomaly with Universal Kepler');
 hold on;
 plot (A(index),B(index),'o');
 legend('Kepler Eqn','Solution for X');
 fprintf('Universal anomaly is %0.5f\n', X);
+% get lagrange coefficients
+Z = alpha.*X.^2;
+C = (cosh(sqrt(-Z)) - 1)./(-Z);
+S = (sinh(sqrt(-Z))-(sqrt(-Z)))./sqrt((-Z).^3);
+f = 1 - X^2*C/r0;
+g = t - X^3*S/sqrt(mu);
+rf = f*R0+g*V0;
+Rf = sqrt(rf(1)^2+rf(2)^2+rf(3)^2);
+
+fprintf('Final Position(km) Vector Is: \n (%0.5f) i + (%0.5f) j + (%0.5f) k \n Magnitude of position vector is %0.5f (km) \n', rf,Rf);
+
+
+% Velocity Vector
+fDot = sqrt(mu)*(alpha*X^3*S-X)/(Rf*r0);
+gDot = 1 - X^2*C/Rf;
+vf = fDot*R0+gDot*V0;
+Vf = sqrt(vf(1)^2+vf(2)^2+vf(3)^2);
+fprintf('Final Velocity Vector(km/s) Is: \n (%0.5f) i + (%0.5f) j + (%0.5f) k \n Magnitude of velocity vector is %0.5f (km/s) \n', vf,Vf);
+
+
+
 
 
