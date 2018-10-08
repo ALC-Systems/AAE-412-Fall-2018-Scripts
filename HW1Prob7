@@ -1,0 +1,46 @@
+clear
+clc
+% AAE 412 HW1 Problem 7
+Re = 6378;
+mu = 398600;
+R0 = [3000 6500 2700];
+V0 = [-6.5 0.8 6];
+% get period
+a = 1/((2/sqrt(dot(R0,R0)))-(dot(V0,V0)/mu));
+T = 2*pi*a^1.5/sqrt(mu);   
+% solve DE with IC
+options = odeset('RelTol',10^(-6));
+IC = [R0 V0]; 
+[T,Z] = ode45('RKD', [0, 2*T], [IC], options);
+
+R1=[Z(:,1) Z(:,2) Z(:,3)];          % Position Vector
+V1=[Z(:,4) Z(:,5) Z(:,6)];          % Velocity Vector
+
+Rmag1 = sqrt(sum(R1'.^2));
+Vmag1 = sqrt(sum(V1'.^2));
+
+ApogeeAltitude = max(Rmag1);
+PerigeeAltitude = min(Rmag1);
+ApogeeVelocity = max(Vmag1);
+PerigeeVelocity = min(Vmag1);
+
+fprintf('At apogee, altitude %0.5f km, velocity %0.5f km/s \n', ApogeeAltitude, ApogeeVelocity);
+fprintf('At perigee, altitude %0.5f km, velocity %0.5f km/s \n', PerigeeAltitude, PerigeeVelocity);
+
+% plot earth and orbit
+
+plot3(Z(:,1),Z(:,2),Z(:,3));
+hold on;
+[x,y,z] = sphere;
+surf(x*Re, y*Re, z*Re);
+grid on;
+xlabel('x (km)');
+ylabel('y (km)');
+zlabel('z (km)');
+title('Orbit Plot Centered at 0,0,0');
+ax.XAxisLocation = 'origin';
+ax.YAxisLocation = 'origin';
+ax.ZAxisLocation = 'origin';
+
+colormap(blue);
+shading interp;
