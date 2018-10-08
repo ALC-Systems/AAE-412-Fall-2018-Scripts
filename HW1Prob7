@@ -37,10 +37,10 @@ grid on;
 xlabel('x (km)');
 ylabel('y (km)');
 zlabel('z (km)');
-title('Orbit Plot Centered at 0,0,0');
+title('Hopefully the Correct Orbit');
 ax.XAxisLocation = 'origin';
 ax.YAxisLocation = 'origin';
 ax.ZAxisLocation = 'origin';
-
-colormap(blue);
+axis equal;
+colormap(pink);
 shading interp;
