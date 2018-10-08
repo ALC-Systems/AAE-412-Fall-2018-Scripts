@@ -1,0 +1,51 @@
+clear;
+clc;
+% AAE 412 HW1 Problem 6
+mu = 398600; % constant
+R0 = [9000 5300 10000];
+V0 = [-2.45 7.5 2.5];
+t = 30*60;   % delta T in seconds
+r0 = sqrt(dot(R0,R0));
+vr0 = dot(R0,V0)/r0;
+v0 = sqrt(dot(V0,V0));
+vtheta = sqrt(v0^2-vr0^2);
+
+alpha = (2/r0) - (v0^2)/(mu);  % if alpha < 0 hyperbolic; if alpha > 0 elliptic
+a = alpha^(-1);
+X0 = sqrt(mu)*t/abs(a);          % initial estimate
+A = linspace(X0,100,100);
+B = [];                          % buffer for Zero
+i = 1;
+flag = 0;
+
+
+%
+while (flag == 0 & i <= length(A))
+    [B(i)] = KeplerAlternate (t, r0, vr0, alpha, A(i));
+    if B(i)>0
+        fprintf('Intersection Found at X = %0.5f\n', A(i));
+        flag = 1;
+        index = i;
+    end
+    i = i+1;
+    
+end
+fprintf('Operation complete\n');
+
+
+for i = 1:length(A)
+    [B1(i)] = KeplerAlternate (t, r0, vr0, alpha, A(i));
+end
+X = A(index);
+
+plot (A,B1);
+grid on;
+xlabel('X');
+ylabel('Intersection');
+title('Universal Kepler Eqn Soln');
+hold on;
+plot (A(index),B(index),'o');
+legend('Kepler Eqn','Solution for X');
+fprintf('Universal anomaly is %0.5f\n', X);
+
+
